@@ -1,23 +1,28 @@
-import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TrainConsistUC5 {
+public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
+        // Step 1: Create a HashMap to store bogie-capacity mapping
+        HashMap<String, Integer> bogieCapacityMap = new HashMap<>();
 
-        // Create LinkedHashSet to store train bogies (unique & ordered)
-        LinkedHashSet<String> trainFormation = new LinkedHashSet<>();
+        // Step 2: Insert capacity values for different passenger bogies
+        bogieCapacityMap.put("Sleeper", 72);
+        bogieCapacityMap.put("AC Chair", 54);
+        bogieCapacityMap.put("First Class", 36);
 
-        // Attach bogies
-        trainFormation.add("Engine");
-        trainFormation.add("Sleeper");
-        trainFormation.add("Cargo");
-        trainFormation.add("Guard");
+        // Step 3: Iterate over the map using entrySet() and display bogie details
+        System.out.println("Train Bogie Capacities:");
+        for (Map.Entry<String, Integer> entry : bogieCapacityMap.entrySet()) {
+            System.out.println("Bogie: " + entry.getKey() + " | Capacity: " + entry.getValue());
+        }
 
-        // Attempt to attach a duplicate bogie
-        trainFormation.add("Sleeper"); // This will be ignored automatically
-
-        // Display final formation
-        System.out.println("Final Train Formation (insertion order, no duplicates):");
-        System.out.println(trainFormation);
+        // Optional: Lookup capacity of a specific bogie quickly
+        String lookupBogie = "AC Chair";
+        if (bogieCapacityMap.containsKey(lookupBogie)) {
+            System.out.println("\nCapacity of " + lookupBogie + " bogie: "
+                    + bogieCapacityMap.get(lookupBogie));
+        }
     }
 }
