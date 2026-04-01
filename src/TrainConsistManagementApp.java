@@ -1,28 +1,50 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-public class TrainConsistManagementApp {
+class Bogie {
+    private String name;
+    private int capacity;
+
+    // Constructor
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+    }
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    @Override
+    public String toString() {
+        return "Bogie: " + name + " | Capacity: " + capacity;
+    }
+}
+
+public class TrainConsistSorting {
 
     public static void main(String[] args) {
-        // Step 1: Create a HashMap to store bogie-capacity mapping
-        HashMap<String, Integer> bogieCapacityMap = new HashMap<>();
+        // Step 1: Create a list to store passenger bogies
+        List<Bogie> bogieList = new ArrayList<>();
 
-        // Step 2: Insert capacity values for different passenger bogies
-        bogieCapacityMap.put("Sleeper", 72);
-        bogieCapacityMap.put("AC Chair", 54);
-        bogieCapacityMap.put("First Class", 36);
+        // Step 2: Add passenger bogies with capacities
+        bogieList.add(new Bogie("Sleeper", 72));
+        bogieList.add(new Bogie("AC Chair", 54));
+        bogieList.add(new Bogie("First Class", 36));
 
-        // Step 3: Iterate over the map using entrySet() and display bogie details
-        System.out.println("Train Bogie Capacities:");
-        for (Map.Entry<String, Integer> entry : bogieCapacityMap.entrySet()) {
-            System.out.println("Bogie: " + entry.getKey() + " | Capacity: " + entry.getValue());
-        }
+        // Step 3: Sort bogies by capacity using Comparator
+        bogieList.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
 
-        // Optional: Lookup capacity of a specific bogie quickly
-        String lookupBogie = "AC Chair";
-        if (bogieCapacityMap.containsKey(lookupBogie)) {
-            System.out.println("\nCapacity of " + lookupBogie + " bogie: "
-                    + bogieCapacityMap.get(lookupBogie));
+        // Step 4: Display sorted bogies
+        System.out.println("=== Passenger Bogies Sorted by Capacity (High to Low) ===");
+        for (Bogie bogie : bogieList) {
+            System.out.println(bogie);
         }
     }
 }
