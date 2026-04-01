@@ -1,28 +1,53 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class TrainConsistManagementApp {
+class Bogie {
+    private String name;
+    private int capacity;
+
+    // Constructor
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+    }
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    @Override
+    public String toString() {
+        return "Bogie: " + name + " | Capacity: " + capacity;
+    }
+}
+
+public class TrainConsistFiltering {
 
     public static void main(String[] args) {
-        // Step 1: Create a HashMap to store bogie-capacity mapping
-        HashMap<String, Integer> bogieCapacityMap = new HashMap<>();
+        // Step 1: Create the bogie list
+        List<Bogie> bogieList = new ArrayList<>();
+        bogieList.add(new Bogie("Sleeper", 72));
+        bogieList.add(new Bogie("AC Chair", 54));
+        bogieList.add(new Bogie("First Class", 36));
+        bogieList.add(new Bogie("Executive Class", 80)); // extra high-capacity bogie
 
-        // Step 2: Insert capacity values for different passenger bogies
-        bogieCapacityMap.put("Sleeper", 72);
-        bogieCapacityMap.put("AC Chair", 54);
-        bogieCapacityMap.put("First Class", 36);
+        // Step 2: Filter bogies with capacity > 60 using Stream API
+        List<Bogie> highCapacityBogies = bogieList.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
 
-        // Step 3: Iterate over the map using entrySet() and display bogie details
-        System.out.println("Train Bogie Capacities:");
-        for (Map.Entry<String, Integer> entry : bogieCapacityMap.entrySet()) {
-            System.out.println("Bogie: " + entry.getKey() + " | Capacity: " + entry.getValue());
-        }
+        // Step 3: Display filtered bogies
+        System.out.println("=== Passenger Bogies with Capacity > 60 ===");
+        highCapacityBogies.forEach(System.out::println);
 
-        // Optional: Lookup capacity of a specific bogie quickly
-        String lookupBogie = "AC Chair";
-        if (bogieCapacityMap.containsKey(lookupBogie)) {
-            System.out.println("\nCapacity of " + lookupBogie + " bogie: "
-                    + bogieCapacityMap.get(lookupBogie));
-        }
+        // Step 4: Verify original list remains unchanged
+        System.out.println("\n=== Original Bogie List ===");
+        bogieList.forEach(System.out::println);
     }
 }
