@@ -1,54 +1,72 @@
 import java.util.*;
 
-// Step 1: Custom Exception
-class InvalidCapacityException extends Exception {
-    public InvalidCapacityException(String message) {
+// Step 1: Custom Runtime Exception
+class CargoSafetyException extends RuntimeException {
+    public CargoSafetyException(String message) {
         super(message);
     }
 }
 
-// Step 2: Passenger Bogie class with validation
-class PassengerBogie {
-    private String type;
-    private int capacity;
+// Step 2: Goods Bogie class
+class GoodsBogie {
+    private String type;   // Cylindrical / Rectangular
+    private String cargo;
 
-    public PassengerBogie(String type, int capacity) throws InvalidCapacityException {
-        if (capacity <= 0) {
-            throw new InvalidCapacityException("Capacity must be greater than zero");
-        }
+    public GoodsBogie(String type) {
         this.type = type;
-        this.capacity = capacity;
+    }
+
+    public void assignCargo(String cargo) {
+        try {
+            // Step 3: Validate safety rule
+            if (type.equals("Rectangular") && cargo.equals("Petroleum")) {
+                throw new CargoSafetyException("Unsafe cargo assignment: Petroleum cannot be loaded in Rectangular bogie");
+            }
+
+            // Safe assignment
+            this.cargo = cargo;
+            System.out.println("Cargo assigned successfully: " + cargo);
+
+        } catch (CargoSafetyException e) {
+            // Step 4: Handle exception
+            System.out.println("Error: " + e.getMessage());
+
+        } finally {
+            // Step 5: Always executes
+            System.out.println("Cargo assignment attempt completed for " + type + " bogie\n");
+        }
     }
 
     @Override
     public String toString() {
-        return type + " (Capacity=" + capacity + ")";
+        return type + " (" + (cargo != null ? cargo : "No Cargo") + ")";
     }
 }
 
-// Step 3: Main class
+// Step 6: Main class
 public class TrainConsist {
 
     public static void main(String[] args) {
 
-        List<PassengerBogie> bogies = new ArrayList<>();
+        List<GoodsBogie> bogies = new ArrayList<>();
 
-        try {
-            // Valid bogies
-            bogies.add(new PassengerBogie("Sleeper", 72));
-            bogies.add(new PassengerBogie("AC Chair", 50));
+        GoodsBogie b1 = new GoodsBogie("Cylindrical");
+        GoodsBogie b2 = new GoodsBogie("Rectangular");
 
-            // Invalid bogie (will throw exception)
-            bogies.add(new PassengerBogie("First Class", 0));
+        bogies.add(b1);
+        bogies.add(b2);
 
-        } catch (InvalidCapacityException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        // Safe assignment
+        b1.assignCargo("Petroleum");
 
-        // Display successfully created bogies
-        System.out.println("\nPassenger Bogies:");
-        for (PassengerBogie b : bogies) {
-            System.out.println(b);
-        }
+        // Unsafe assignment (handled safely)
+        b2.assignCargo("Petroleum");
+
+        // Program continues
+        b2.assignCargo("Coal");
+
+        // Display final state
+        System.out.println("Final Bogie Status:");
+        bogies.forEach(System.out::println);
     }
 }
